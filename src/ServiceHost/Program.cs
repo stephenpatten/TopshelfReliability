@@ -8,6 +8,14 @@ using Topshelf;
 
 namespace ServiceHost
 {
+
+    //https://topshelf.readthedocs.io/en/latest/configuration/quickstart.html
+    //https://github.com/Topshelf/Topshelf/blob/develop/src/Topshelf/HostStartedContext.cs
+
+
+    //https://github.com/Topshelf/Topshelf/issues/306
+    //https://github.com/Topshelf/Topshelf/pull/311/files#diff-8
+
     public class TownCrier
     {
         readonly Timer _timer;
@@ -39,7 +47,12 @@ namespace ServiceHost
                     s.WhenStarted(tc => tc.Start());              //4
                     s.WhenStopped(tc => tc.Stop());               //5
                 });
-                x.RunAsLocalSystem();                            //6
+
+            x.OnException((exception) =>
+                   {
+                Console.WriteLine("Exception thrown - " + exception.Message);
+                                   });
+            x.RunAsLocalSystem();                            //6
 
                 x.SetDescription("Sample Topshelf Host");        //7
                 x.SetDisplayName("Stuff");                       //8
